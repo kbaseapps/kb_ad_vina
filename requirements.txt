@@ -1,0 +1,5 @@
+biopython==1.79
+matplotlib==3.3.4
+pandas==1.1.5
+pytest==7.1.1
+pytest-cov==3.0.0

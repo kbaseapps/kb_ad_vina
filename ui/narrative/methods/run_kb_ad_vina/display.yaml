@@ -1,0 +1,43 @@
+#
+# define display information
+#
+name: SFA Example App 1
+
+tooltip: |
+    Take the top ten reads from a Single End reads object.
+
+screenshots: []
+
+icon: icon.png
+
+#
+# define a set of similar apps that might be useful to the user
+#
+suggestions:
+    apps:
+        related:
+            [app1, app2]
+        next:
+            [app3, app4]
+
+#
+# Configure the display and description of parameters
+#
+parameters :
+    reads_ref :
+        ui-name : |
+            Reads
+        short-hint : |
+            A Single End Reads object
+        long-hint  : |
+            A Single End Reads object whose top ten reads you care about.
+    output_name:
+        ui-name : |
+            Output Name
+        short-hint : |
+            The name of the resulting object
+        long-hint  : |
+            A name for the ten reads returned.
+
+description : |
+    <p> Take the top ten reads from a Single End reads object.</p>
