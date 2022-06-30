@@ -4,9 +4,9 @@ import logging
 import os
 
 from installed_clients.KBaseReportClient import KBaseReport
-from installed_clients.ReadsUtilsClient import ReadsUtils
-from .utils import ExampleReadsApp
-from base import Core
+from installed_clients.CompoundSetUtilsClient import CompoundSetUtils
+from installed_clients.ProteinStructureUtilsClient import ProteinStructureUtils
+from .utils import ADVinaApp
 
 
 #END_HEADER
@@ -28,8 +28,8 @@ class kb_ad_vina:
     # the latter method is running.
     ######################################### noqa
     VERSION = "0.0.1"
-    GIT_URL = ""
-    GIT_COMMIT_HASH = ""
+    GIT_URL = "git@github.com:kbaseapps/kb_ad_vina.git"
+    GIT_COMMIT_HASH = "82d13d646d24a78e354fe5f2928fc5b9f9a38b68"
 
     #BEGIN_CLASS_HEADER
     #END_CLASS_HEADER
@@ -44,6 +44,7 @@ class kb_ad_vina:
                             level=logging.INFO)
         #END_CONSTRUCTOR
         pass
+
 
     def run_kb_ad_vina(self, ctx, params):
         """
@@ -60,14 +61,15 @@ class kb_ad_vina:
             callback_url=self.callback_url,
             shared_folder=self.shared_folder,
             clients=dict(
+                CompoundSetUtils=CompoundSetUtils,
+                ProteinStructureUtils=ProteinStructureUtils,
                 KBaseReport=KBaseReport,
-                ReadsUtils=ReadsUtils
             ),
         )
         # Download Reads
 
-        era = ExampleReadsApp(ctx, config=config)
-        output = era.do_analysis(params)
+        adv = ADVinaApp(ctx, config=config)
+        output = adv.do_analysis(params)
 
         #END run_kb_ad_vina
 
@@ -77,7 +79,6 @@ class kb_ad_vina:
                              'output is not type dict as required.')
         # return the results
         return [output]
-
     def status(self, ctx):
         #BEGIN_STATUS
         returnVal = {'state': "OK",

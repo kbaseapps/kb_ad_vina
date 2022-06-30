@@ -3,7 +3,7 @@ import subprocess
 
 import pytest
 
-from kb_ad_vina.utils import ExampleReadsApp
+from kb_ad_vina.utils import ADVinaApp
 
 @pytest.fixture
 def process():
