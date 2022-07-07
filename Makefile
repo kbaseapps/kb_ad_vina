@@ -79,7 +79,7 @@ test:
 	bash $(TEST_DIR)/$(TEST_SCRIPT_NAME)
 
 unit-tests:
-	PYTHONPATH=.:lib:test:$(PYTHONPATH) pytest test/unit_tests --cov lib/$(SERVICE)/ --verbose --cov-config=tox.ini
+	PYTHONPATH=.:lib:test:$(PYTHONPATH) pytest -s test/unit_tests --cov lib/$(SERVICE)/ --verbose --cov-config=tox.ini
 
 clean:
 	rm -rfv $(LBIN_DIR)
