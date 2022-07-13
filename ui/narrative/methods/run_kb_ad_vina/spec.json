@@ -1,7 +1,8 @@
 {
     "ver": "0.0.1",
     "authors": [
-        "dakotablair"
+        "dakota",
+        "idongesit"
     ],
     "contact": "",
     "categories": ["active"],
@@ -11,28 +12,27 @@
     },
     "parameters": [
         {
-            "id": "reads_ref",
-            "optional": false,
+            "id": "receptor_ref",
+            "optional": true,
             "advanced": false,
             "allow_multiple": false,
             "default_values": [ "" ],
             "field_type": "text",
             "text_options": {
-                "valid_ws_types": [ "KBaseFile.SingleEndLibrary" ]
+                "valid_ws_types": ["KBaseStructure.ModelProteinStructure"]
             }
         },
         {
-            "id" : "output_name",
-            "optional" : false,
-            "advanced" : false,
-            "allow_multiple" : false,
-            "default_values" : [ "ReadsHead" ],
-            "field_type" : "text",
-            "text_options" : {
-              "valid_ws_types" : [ "KBaseFile.SingleEndLibrary" ],
-              "is_output_name":true
-             }
-        }
+            "id": "ligand_refs",
+            "optional": true,
+            "advanced": false,
+            "allow_multiple": true,
+            "default_values": [ "" ],
+            "field_type": "text",
+            "text_options": {
+                "valid_ws_types": ["KBaseBiochem.CompoundSet"]
+            }
+         }
     ],
     "behavior": {
         "service-mapping": {
@@ -47,13 +47,14 @@
                     "narrative_system_variable": "workspace_id",
                     "target_property": "workspace_id"
                 },{
-                    "input_parameter": "reads_ref",
-                    "target_property": "reads_ref",
+                    "input_parameter": "receptor_ref",
+                    "target_property": "receptor_ref",
                     "target_type_transform": "resolved-ref"
                 },{
-                    "input_parameter": "output_name",
-                    "target_property": "output_name"
-                }
+                  "input_parameter": "ligand_refs",
+                  "target_property": "ligand_refs",
+                  "target_type_transform": "resolved-ref"
+               }
             ],
             "output_mapping": [
                 {

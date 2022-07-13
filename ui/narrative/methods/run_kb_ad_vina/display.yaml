@@ -24,6 +24,16 @@ suggestions:
 # Configure the display and description of parameters
 #
 parameters :
+    receptor_ref :
+        ui-name : |
+            Protein structure to dock with specified ligands
+        short-hint : |
+            Accepts a single Model Protein Structure
+    ligand_refs:
+        ui-name : |
+            Ligand List
+        short-hint : |
+            Accepts Set of compounds to dock with protein structures
     reads_ref :
         ui-name : |
             Reads
