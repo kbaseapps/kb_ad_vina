@@ -73,7 +73,8 @@ class kb_ad_vinaTest(unittest.TestCase):
             self.ctx,
             {
                 "workspace_name": self.wsName,
-                # Other test parameters go here.
+                "receptor_ref": "67060/5/2",
+                "ligand_refs": ["67060/2/1", "67060/4/1"],
             },
         )
         # next steps:

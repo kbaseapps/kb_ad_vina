@@ -3,8 +3,9 @@
 import logging
 import os
 
-from installed_clients.KBaseReportClient import KBaseReport
 from installed_clients.CompoundSetUtilsClient import CompoundSetUtils
+from installed_clients.DataFileUtilClient import DataFileUtil
+from installed_clients.KBaseReportClient import KBaseReport
 from installed_clients.ProteinStructureUtilsClient import ProteinStructureUtils
 from .utils import ADVinaApp
 
@@ -29,7 +30,7 @@ class kb_ad_vina:
     ######################################### noqa
     VERSION = "0.0.1"
     GIT_URL = "git@github.com:kbaseapps/kb_ad_vina.git"
-    GIT_COMMIT_HASH = "82d13d646d24a78e354fe5f2928fc5b9f9a38b68"
+    GIT_COMMIT_HASH = "41bc526b9ac8990a37af0ca23d8d71a4c99e8719"
 
     #BEGIN_CLASS_HEADER
     #END_CLASS_HEADER
@@ -62,8 +63,9 @@ class kb_ad_vina:
             shared_folder=self.shared_folder,
             clients=dict(
                 CompoundSetUtils=CompoundSetUtils,
-                ProteinStructureUtils=ProteinStructureUtils,
+                DataFileUtil=DataFileUtil,
                 KBaseReport=KBaseReport,
+                ProteinStructureUtils=ProteinStructureUtils,
             ),
         )
         # Download Reads

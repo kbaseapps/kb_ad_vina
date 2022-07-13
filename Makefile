@@ -55,7 +55,7 @@ build-test-script:
 	echo 'export PYTHONPATH=$$script_dir/../$(LIB_DIR):$$PATH:$$PYTHONPATH' >> $(TEST_DIR)/$(TEST_SCRIPT_NAME)
 	echo 'cd $$script_dir/../$(TEST_DIR)' >> $(TEST_DIR)/$(TEST_SCRIPT_NAME)
 	echo 'echo $$PWD' >> $(TEST_DIR)/$(TEST_SCRIPT_NAME)
-	echo 'python -m pytest --cov-report=term-missing --cov-report=xml --cov ../lib/$(SERVICE) --verbose --cov-config=../tox.ini' >> $(TEST_DIR)/$(TEST_SCRIPT_NAME)
+	echo 'python -m pytest -s --cov-report=term-missing --cov-report=xml --cov ../lib/$(SERVICE) --verbose --cov-config=../tox.ini' >> $(TEST_DIR)/$(TEST_SCRIPT_NAME)
 	chmod +x $(TEST_DIR)/$(TEST_SCRIPT_NAME)
 
 docker-build:
