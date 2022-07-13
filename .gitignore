@@ -1,2 +1,4 @@
-test_local
+.coverage
+__pycache__
 sdk.cfg
+test_local
