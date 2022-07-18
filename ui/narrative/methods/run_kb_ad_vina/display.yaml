@@ -34,13 +34,76 @@ parameters :
             Ligand List
         short-hint : |
             Accepts Set of compounds to dock with protein structures
-    reads_ref :
+    center_x :
         ui-name : |
-            Reads
+            X coordinate
         short-hint : |
-            A Single End Reads object
+            X Coordinate of the center
         long-hint  : |
-            A Single End Reads object whose top ten reads you care about.
+            X Coordinate of the center of the search space
+    center_y :
+        ui-name : |
+            Y coordinate
+        short-hint : |
+            Y Coordinate of the center
+        long-hint  : |
+            Y Coordinate of the center of the search space
+    center_z :
+        ui-name : |
+            Z coordinate
+        short-hint : |
+            Z Coordinate of the center
+        long-hint  : |
+            Z Coordinate of the center of the search space
+    size_x :
+        ui-name : |
+            size in the X dimension
+        short-hint : |
+            size in the X dimension of the search space
+        long-hint  : |
+            size in the X dimension of the search space (Angstrom)
+    size_y :
+        ui-name : |
+            size in the Y dimension
+        short-hint : |
+            size in the Y dimension of the search space
+        long-hint  : |
+            size in the Y dimension of the search space (Angstrom)
+    size_z :
+        ui-name : |
+            size in the Z dimension
+        short-hint : |
+            size in the Z dimension of the search space
+        long-hint  : |
+            size in the Z dimension of the search space (Angstrom)
+    seed :
+        ui-name : |
+            seed
+        short-hint : |
+            random seed
+        long-hint  : |
+            explicit random
+    exhaustiveness :
+        ui-name : |
+            exhaustiveness
+        short-hint : |
+            exhaustiveness of the global search
+        long-hint  : |
+            exhaustiveness of the global search (roughly proportional to time): 1+
+    num_modes :
+        ui-name : |
+            number of binding modes
+        short-hint : |
+            number of binding modes to generate
+        long-hint  : |
+            maximum number of binding modes to generate
+    energy_range :
+        ui-name : |
+            energy range
+        short-hint : |
+            maximum energy difference b/w binding modes
+        long-hint  : |
+            maximum energy difference between the best binding mode and the worst one displayed (kcal/mol)
     output_name:
         ui-name : |
             Output Name
