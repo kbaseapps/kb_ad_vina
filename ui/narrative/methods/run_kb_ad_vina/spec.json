@@ -32,7 +32,123 @@
             "text_options": {
                 "valid_ws_types": ["KBaseBiochem.CompoundSet"]
             }
-         }
+         },
+         {
+            "id": "center_x",
+            "optional": true,
+            "advanced": true,
+            "allow_multiple": false,
+            "default_values": [ "" ],
+            "field_type": "text",
+            "text_options": {
+                "validate_as": "float"
+            }
+        },
+        {
+            "id": "center_y",
+            "optional": true,
+            "advanced": true,
+            "allow_multiple": false,
+            "default_values": [ "" ],
+            "field_type": "text",
+            "text_options": {
+                "validate_as": "float"
+            }
+        },
+        {
+            "id": "center_z",
+            "optional": true,
+            "advanced": true,
+            "allow_multiple": false,
+            "default_values": [ "" ],
+            "field_type": "text",
+            "text_options": {
+                "validate_as": "float"
+            }
+        },
+        {
+            "id": "size_x",
+            "optional": true,
+            "advanced": true,
+            "allow_multiple": false,
+            "default_values": [ "" ],
+            "field_type": "text",
+            "text_options": {
+                "validate_as": "float",
+                "min_float": 0
+            }
+        },
+        {
+            "id": "size_y",
+            "optional": true,
+            "advanced": true,
+            "allow_multiple": false,
+            "default_values": [ "" ],
+            "field_type": "text",
+            "text_options": {
+                "validate_as": "float",
+                "min_float": 0
+            }
+        },
+        {
+            "id": "size_z",
+            "optional": true,
+            "advanced": true,
+            "allow_multiple": false,
+            "default_values": [ "" ],
+            "field_type": "text",
+            "text_options": {
+                "validate_as": "float",
+                "min_float": 0
+            }
+        },
+        {
+            "id": "seed",
+            "optional": true,
+            "advanced": true,
+            "allow_multiple": false,
+            "default_values": [ "" ],
+            "field_type": "text",
+            "text_options": {
+                "validate_as": "int"
+            }
+        },
+        {
+            "id": "exhaustiveness",
+            "optional": true,
+            "advanced": true,
+            "allow_multiple": false,
+            "default_values": [ "8" ],
+            "field_type": "text",
+            "text_options": {
+                "validate_as": "int",
+                "min_int": 1
+            }
+        },
+        {
+            "id": "num_modes",
+            "optional": true,
+            "advanced": true,
+            "allow_multiple": false,
+            "default_values": [ "9" ],
+            "field_type": "text",
+            "text_options": {
+                "validate_as": "int",
+                "min_int": 1
+            }
+        },
+        {
+            "id": "energy_range",
+            "optional": true,
+            "advanced": true,
+            "allow_multiple": false,
+            "default_values": [ "3" ],
+            "field_type": "text",
+            "text_options": {
+                "validate_as": "float",
+                "min_float": 0.0000001
+            }
+        }
     ],
     "behavior": {
         "service-mapping": {
@@ -54,6 +170,46 @@
                   "input_parameter": "ligand_refs",
                   "target_property": "ligand_refs",
                   "target_type_transform": "resolved-ref"
+               },
+               {
+                "input_parameter": "center_x",
+                "target_property": "center_x"
+               },
+               {
+                "input_parameter": "center_y",
+                "target_property": "center_y"
+               },
+               {
+                "input_parameter": "center_z",
+                "target_property": "center_z"
+               },
+               {
+                "input_parameter": "size_x",
+                "target_property": "size_x"
+               },
+               {
+                "input_parameter": "size_y",
+                "target_property": "size_y"
+               },
+               {
+                "input_parameter": "size_z",
+                "target_property": "size_z"
+               },
+               {
+                "input_parameter": "seed",
+                "target_property": "seed"
+               },
+               {
+                "input_parameter": "exhaustiveness",
+                "target_property": "exhaustiveness"
+               },
+               {
+                "input_parameter": "num_modes",
+                "target_property": "num_modes"
+               },
+               {
+                "input_parameter": "energy_range",
+                "target_property": "energy_range"
                }
             ],
             "output_mapping": [
