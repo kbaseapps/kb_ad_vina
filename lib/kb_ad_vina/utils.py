@@ -178,7 +178,7 @@ class ADVinaApp(Core):
         Download a receptor ModelProteinStructure object
         param: receptor_ref - the receptor reference/upa
         """
-        out = self.psu.export_pdb({ "input_ref": receptor_ref })
+        out = self.psu.export_pdb_structures({ "input_ref": receptor_ref })
         out_filename = f"{encode_upa_filename(receptor_ref)}.pdb"
         out_path = os.path.join(self.shared_folder, out_filename)
         self.dfu.shock_to_file({

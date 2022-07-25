@@ -39,89 +39,35 @@ class ProteinStructureUtils(object):
             async_job_check_time_scale_percent=async_job_check_time_scale_percent,
             async_job_check_max_time_ms=async_job_check_max_time_ms)
 
-    def structure_to_pdb_file(self, params, context=None):
-        """
-        :param params: instance of type "StructureToPDBFileParams" ->
-           structure: parameter "input_ref" of type "obj_ref" (An X/Y/Z style
-           reference @id ws), parameter "destination_dir" of String
-        :returns: instance of type "StructureToPDBFileOutput" -> structure:
-           parameter "file_path" of String
-        """
-        return self._client.run_job('ProteinStructureUtils.structure_to_pdb_file',
-                                    [params], self._service_ver, context)
-
-    def export_pdb(self, params, context=None):
-        """
-        :param params: instance of type "ExportParams" (Input of the
-           export_pdb function obj_ref: generics object reference) ->
-           structure: parameter "input_ref" of type "obj_ref" (An X/Y/Z style
-           reference @id ws)
-        :returns: instance of type "ExportOutput" -> structure: parameter
-           "shock_id" of String
-        """
-        return self._client.run_job('ProteinStructureUtils.export_pdb',
-                                    [params], self._service_ver, context)
-
-    def import_model_pdb_file(self, params, context=None):
-        """
-        import_model_pdb_file: import a ProteinStructure from PDB
-        :param params: instance of type "ImportPDBParams" (Input of the
-           import_model_pdb_file and import_experiment_pdb_file functions
-           input_shock_id: file shock id input_file_path: absolute file path
-           input_staging_file_path: staging area file path structure_name:
-           structure object name workspace_name: workspace name for object to
-           be saved to) -> structure: parameter "input_shock_id" of String,
-           parameter "input_file_path" of String, parameter
-           "input_staging_file_path" of String, parameter "structure_name" of
-           String, parameter "description" of String, parameter
-           "workspace_name" of type "workspace_name" (workspace name of the
-           object)
-        :returns: instance of type "ImportPDBOutput" -> structure: parameter
-           "report_name" of String, parameter "report_ref" of String,
-           parameter "structure_obj_ref" of type "obj_ref" (An X/Y/Z style
-           reference @id ws)
-        """
-        return self._client.run_job('ProteinStructureUtils.import_model_pdb_file',
-                                    [params], self._service_ver, context)
-
-    def import_experiment_pdb_file(self, params, context=None):
-        """
-        import_experiment_pdb_file: import a ProteinStructure from PDB
-        :param params: instance of type "ImportPDBParams" (Input of the
-           import_model_pdb_file and import_experiment_pdb_file functions
-           input_shock_id: file shock id input_file_path: absolute file path
-           input_staging_file_path: staging area file path structure_name:
-           structure object name workspace_name: workspace name for object to
-           be saved to) -> structure: parameter "input_shock_id" of String,
-           parameter "input_file_path" of String, parameter
-           "input_staging_file_path" of String, parameter "structure_name" of
-           String, parameter "description" of String, parameter
-           "workspace_name" of type "workspace_name" (workspace name of the
-           object)
-        :returns: instance of type "ImportPDBOutput" -> structure: parameter
-           "report_name" of String, parameter "report_ref" of String,
-           parameter "structure_obj_ref" of type "obj_ref" (An X/Y/Z style
-           reference @id ws)
-        """
-        return self._client.run_job('ProteinStructureUtils.import_experiment_pdb_file',
-                                    [params], self._service_ver, context)
-
     def batch_import_pdbs_from_metafile(self, params, context=None):
         """
         batch_import_pdbs_from_metafile: import a batch of ProteinStructures from PDB files
-        :param params: instance of type "BatchPDBImportParams" (Input of the
-           batch_import_pdbs_from_metafile structures_name: Proteinstructures
-           object name workspace_name: workspace name for object to be saved
-           to metadata_staging_file_path: path to a spreadsheet file that
-           lists the metadata of PDB files and their KBase metadata) ->
-           structure: parameter "metadata_staging_file_path" of String,
-           parameter "structures_name" of String, parameter "workspace_name"
-           of type "workspace_name" (workspace name of the object)
+        :param params: instance of type "BatchPDBImportParams" (Input/Output
+           of the batch_import_pdbs_from_metafile structures_name:
+           Proteinstructures object name workspace_name: workspace name for
+           object to be saved to metadata_staging_file_path: path to a
+           spreadsheet file that lists the metadata of PDB files and their
+           KBase metadata) -> structure: parameter
+           "metadata_staging_file_path" of String, parameter
+           "structures_name" of String, parameter "workspace_name" of type
+           "workspace_name" (workspace name of the object)
         :returns: instance of type "BatchPDBImportOutput" -> structure:
            parameter "structures_ref" of String, parameter "report_name" of
            String, parameter "report_ref" of String
         """
         return self._client.run_job('ProteinStructureUtils.batch_import_pdbs_from_metafile',
+                                    [params], self._service_ver, context)
+
+    def export_pdb_structures(self, params, context=None):
+        """
+        :param params: instance of type "ExportParams" (Input/output of the
+           export_pdb_structures function obj_ref: generics object reference)
+           -> structure: parameter "input_ref" of type "obj_ref" (An X/Y/Z
+           style reference @id ws)
+        :returns: instance of type "ExportStructOutput" -> structure:
+           parameter "shock_id" of list of String
+        """
+        return self._client.run_job('ProteinStructureUtils.export_pdb_structures',
                                     [params], self._service_ver, context)
 
     def status(self, context=None):
