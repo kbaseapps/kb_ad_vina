@@ -30,7 +30,7 @@ class kb_ad_vina:
     ######################################### noqa
     VERSION = "0.0.1"
     GIT_URL = "git@github.com:kbaseapps/kb_ad_vina.git"
-    GIT_COMMIT_HASH = "41bc526b9ac8990a37af0ca23d8d71a4c99e8719"
+    GIT_COMMIT_HASH = "5757171dbfe1dcb36a76c3b977b7573f68b8e659"
 
     #BEGIN_CLASS_HEADER
     #END_CLASS_HEADER
