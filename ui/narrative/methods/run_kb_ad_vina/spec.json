@@ -5,7 +5,7 @@
         "idongesit"
     ],
     "contact": "",
-    "categories": ["active"],
+    "categories": ["active","reads","util"],
     "widgets": {
         "input": null,
         "output": "no-display"

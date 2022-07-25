@@ -1,10 +1,11 @@
 #
 # define display information
 #
-name: SFA Example App 1
+name: AutoDock Vina
 
 tooltip: |
-    Take the top ten reads from a Single End reads object.
+    Kbase app that wraps Autodock Vina so that multiple candidate ligands can be docked to the same target protein
+
 
 screenshots: []
 
@@ -113,4 +114,10 @@ parameters :
             A name for the ten reads returned.
 
 description : |
-    <p> Take the top ten reads from a Single End reads object.</p>
+    <p> Kbase app that wraps Autodock Vina so that multiple candidate ligands can be docked to the same target protein. Produces Affinity table and pdbqt and sdf output files.</p>
+
+publications :
+    -
+        display-text: |
+            Github for kb_ad_vina
+        link: https://github.com/kbaseapps/kb_ad_vina
