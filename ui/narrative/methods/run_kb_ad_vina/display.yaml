@@ -105,6 +105,13 @@ parameters :
             maximum energy difference b/w binding modes
         long-hint  : |
             maximum energy difference between the best binding mode and the worst one displayed (kcal/mol)
+    ligands_output_suffix:
+        ui-name : |
+            Ligands Output Suffix
+        short-hint : |
+            The suffix to be used with the resulting output from ADVina
+        long-hint  : |
+            The suffix to be used with the resulting of the resulting ligands from ADVina.
     output_name:
         ui-name : |
             Output Name
