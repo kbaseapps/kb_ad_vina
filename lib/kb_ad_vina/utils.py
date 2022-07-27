@@ -75,6 +75,22 @@ def ligand_as_pdbqt(ligand):
         proc.communicate()
     return f"{ligand}.pdbqt"
 
+def pdbqt_ligand_as_sdf(ligand_output):
+    """
+    This function expects ligand to be a path to a ligand in sdf format.
+    """
+    ligand_output_obabel_cmd = (
+        f"obabel -i pdbqt {ligand_output} -o sdf -O {ligand_output}.sdf -r"
+    )
+    with subprocess.Popen(
+        ligand_output_obabel_cmd,
+        shell=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+    ) as proc:
+        proc.communicate()
+    return f"{ligand_output}.sdf"
+
 
 def run_vina(receptor, ligand, working_directory, params):
     print(f"RUNNING VINA FOR RECEPTOR {receptor} AND LIGAND {ligand}")
@@ -144,17 +160,21 @@ class ADVinaApp(Core):
         """
         receptor_ref = params.get("receptor_ref")
         ligand_refs = params.get("ligand_refs")
+        ligands_output_suffix = params.get("ligands_output_suffix")
+        self.workspace_id = params["workspace_id"]
         # Download the receptor and ligands from KBase.
         resp_receptor_orig = self.download_receptor(receptor_ref)
         resp_ligands_orig = self.download_ligands(ligand_refs)
+        # Download the ligands output suffix from KBase ?
         # Convert inputs to PDBQT.
         receptor_filename = self.receptor_as_pdbqt(resp_receptor_orig)
         ligand_filenames = self.ligands_as_pdbqts(resp_ligands_orig)
         # Run AutoDock Vina on inputs.
         output = self.run_vinas(receptor_filename, ligand_filenames, params)
         # Upload the resulting input and output PDBQT files.
+        ligand_output_refs=self.upload_ligands(output)
         # Generate the report.
-        return self.generate_report(output, params)
+        return self.generate_report(output, ligand_output_refs,params)
 
     def download_ligands(self, ligand_refs):
         """
@@ -218,7 +238,7 @@ class ADVinaApp(Core):
             for ligand_filename in ligand_filenames
         ]
 
-    def generate_report(self, output, params: dict):
+    def generate_report(self, output, ligand_output_refs, params: dict):
         """
         This method is where to define the variables to pass to the report.
         """
@@ -246,3 +266,18 @@ class ADVinaApp(Core):
             workspace_name=params["workspace_name"],
         )
         return self.create_report_from_template(template_path, config)
+
+    def upload_ligands(self, output):
+        """
+        Upload a list of CompoundSet objects 
+        param: ligands_ref - A list of ligands references/upas
+        """
+        paths=[path for (path,_) in output]
+
+        params = {
+            'workspace_id': self.workspace_id,
+            'staging_file_path': path,
+            'compound_set_name': 'sdf_set',
+        }
+
+
