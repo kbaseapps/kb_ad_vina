@@ -75,6 +75,16 @@ class kb_ad_vinaTest(unittest.TestCase):
                 "workspace_name": self.wsName,
                 "receptor_ref": "67060/5/2",
                 "ligand_refs": ["67060/2/1", "67060/4/1"],
+                "center_x": -7,
+                "center_y": 78,
+                "center_z": 38.6,
+                "size_x": 34,
+                "size_y": 30,
+                "size_z": 22,
+                "seed": 0,
+                "exhaustiveness": 2,
+                "num_modes": 10,
+                "energy_range": 10,
             },
         )
         # next steps:

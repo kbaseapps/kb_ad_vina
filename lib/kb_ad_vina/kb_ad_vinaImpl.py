@@ -7,6 +7,7 @@ from installed_clients.CompoundSetUtilsClient import CompoundSetUtils
 from installed_clients.DataFileUtilClient import DataFileUtil
 from installed_clients.KBaseReportClient import KBaseReport
 from installed_clients.ProteinStructureUtilsClient import ProteinStructureUtils
+from installed_clients.WorkspaceClient import Workspace
 from .utils import ADVinaApp
 
 
@@ -41,6 +42,7 @@ class kb_ad_vina:
         #BEGIN_CONSTRUCTOR
         self.callback_url = os.environ['SDK_CALLBACK_URL']
         self.shared_folder = config['scratch']
+        self.ws_url = config['workspace-url']
         logging.basicConfig(format='%(created)s %(levelname)s: %(message)s',
                             level=logging.INFO)
         #END_CONSTRUCTOR
@@ -61,6 +63,8 @@ class kb_ad_vina:
         config = dict(
             callback_url=self.callback_url,
             shared_folder=self.shared_folder,
+            ws_url=self.ws_url,
+            Workspace=Workspace,
             clients=dict(
                 CompoundSetUtils=CompoundSetUtils,
                 DataFileUtil=DataFileUtil,
