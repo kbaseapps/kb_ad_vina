@@ -10,7 +10,7 @@ COPY ./requirements.txt /kb/module/requirements.txt
 ENV PIP_PROGRESS_BAR=off
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
-RUN pip install -e git+https://github.com/kbase-sfa-2021/sfa.git#egg=base
+RUN pip install git+https://github.com/kbase-sfa-2021/sfa.git@5d663ef13417bef10d449664de6c99b310816c95
 
 COPY ./ /kb/module
 RUN mkdir -p /kb/module/work
