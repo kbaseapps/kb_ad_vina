@@ -87,7 +87,7 @@ def ligand_as_pdbqt(ligand):
 
 def pdbqt_ligand_as_sdf(ligand_output):
     """
-    This function expects ligand to be a path to a ligand in sdf format.
+    This function expects ligand to be a path to a ligand in pdbqt format.
     """
     ligand_output_obabel_cmd = (
         f"obabel -i pdbqt {ligand_output} -o sdf -O {ligand_output}.sdf -r"
@@ -188,7 +188,7 @@ class ADVinaApp(Core):
         """
         receptor_ref = params.get("receptor_ref")
         ligand_refs = params.get("ligand_refs")
-        ligands_output_suffix = params.get("ligands_output_suffix")
+        ligands_out_suffix = params.get("ligands_output_suffix")
         self.workspace_id = params["workspace_id"]
         # Download the receptor and ligands from KBase.
         resp_receptor_orig = self.download_receptor(receptor_ref)
@@ -201,7 +201,7 @@ class ADVinaApp(Core):
         # Run AutoDock Vina on inputs.
         output = self.run_vinas(receptor_path, ligand_filenames, params)
         # Upload the resulting input and output PDBQT files.
-        ligand_output_refs = self.upload_ligands(output, ligands_output_suffix)
+        ligand_output_refs = self.upload_ligands(ligands_out_suffix, output)
         # Generate the report.
         return self.generate_report(output, ligand_output_refs, params)
 
@@ -383,16 +383,24 @@ class ADVinaApp(Core):
             for ligand_filename in ligand_filenames
         ]
 
-    def upload_ligands(self, output, suffix):
+    def upload_ligands(self, ligand_suffix, output):
         """
         Upload a list of CompoundSet objects
-        param: ligands_ref - A list of ligands references/upas
+        param:output - pdbqt file and the logfile
         """
-        paths = [path for (path, _) in output]
-
-        params = {
-            "workspace_id": self.workspace_id,
-            "staging_file_path": paths,
-            "compound_set_name": "sdf_set",
-        }
-        return params
+        output_ligands = []
+        for (o_ligand_ref, _) in output:
+            out = self.csu.compound_set_from_file(
+                {
+                    "workspace_id": self.workspace_id,
+                    "staging_file_path": o_ligand_ref,
+                    "compound_set_name": "sdf_set",
+                }
+            )
+            src = out["file_path"]
+            dst_filename = (
+                f"{encode_upa_filename(o_ligand_ref)}.{ligand_suffix}.sdf"
+            )
+            dst = os.path.join(self.shared_folder, dst_filename)
+            output_ligands.append(copyfile(src, dst))
+        return output_ligands
