@@ -9,8 +9,6 @@ import subprocess
 import textwrap
 import uuid
 
-from collections import namedtuple
-from pprint import pformat
 from shutil import copyfile, make_archive
 
 # This is the SFA base package which provides the Core app class.
@@ -283,6 +281,7 @@ class ADVinaApp(Core):
         # The KBaseReport configuration dictionary
         config = dict(
             report_name=report_name,
+            report_params=report_params,
             reports_path=reports_path,
             template_variables=template_variables,
             workspace_name=params["workspace_name"],
