@@ -2,6 +2,12 @@
 <html>
  <head>
   <link rel="stylesheet" type="text/css" href="/narrative/static/style/style.min.css">
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.css">
+  <script
+    src="https://code.jquery.com/jquery-3.6.0.min.js"
+    integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+    crossorigin="anonymous"></script>
+  <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.js"></script>
  </head>
  <body>
   <h1>AutoDock Vina output</h1>
@@ -11,63 +17,71 @@
       Receptor PDBQT
     </a>
    <h2>Ligands</h2>
-   <table>
+   <table id="vina">
    {% for log, logdata in logs.items() %}
    {% if loop.first %}
-    <tr>
-     <th>Ligand</th>
-     <th title="Affinity of best candidate.">Affinity</th>
-     <th title="The PDBQT file used as input for vina.">Input PDBQT</th>
-     <th title="The PDBQT file produced by vina.">Output PDBQT</th>
-     <th title="The log output from vina.">Output log</th>
-     <!--
-     <th>Output Object</th>
-     <th>Visualization</th>
-     -->
-    </tr>
+    <thead>
+     <tr>
+      <th>Ligand</th>
+      <th title="Affinity of best candidate.">Affinity</th>
+      <th title="The PDBQT file used as input for vina.">Input PDBQT</th>
+      <th title="The PDBQT file produced by vina.">Output PDBQT</th>
+      <th title="The log output from vina.">Output log</th>
+      <!--
+      <th>Output Object</th>
+      <th>Visualization</th>
+      -->
+     </tr>
+    </thead>
+    <tbody>
    {% endif %}
-    <tr>
-     <td>{{ logdata["name"] }}</td>
-     <td>{{ logdata["affinity"] }}</td>
-     <td>
-         <a href="{{ logdata["ligand_pdbqt_input"] }}">
-            Vina Input
-         </a>
-     </td>
-     <td>
-         <a href="{{ logdata["ligand_pdbqt_output"] }}">
-            Vina Output
-         </a>
-     </td>
-     <td>
-         <a href="{{ logdata["log_path"] }}">
-            Vina Log
-         </a>
-     </td>
-     <!--
-     <td>
-         <a href="/#dataview/{{ logdata["output_ref"] }}">
-            {{ logdata["output_ref"] }}
-         </a>
-     </td>
-     -->
-    </tr>
+     <tr>
+      <td>{{ logdata["name"] }}</td>
+      <td>{{ logdata["affinity"] }}</td>
+      <td>
+          <a href="{{ logdata["ligand_pdbqt_input"] }}">
+             Vina Input
+          </a>
+      </td>
+      <td>
+          <a href="{{ logdata["ligand_pdbqt_output"] }}">
+             Vina Output
+          </a>
+      </td>
+      <td>
+          <a href="{{ logdata["log_path"] }}">
+             Vina Log
+          </a>
+      </td>
+      <!--
+      <td>
+          <a href="/#dataview/{{ logdata["output_ref"] }}">
+             {{ logdata["output_ref"] }}
+          </a>
+      </td>
+      -->
+     </tr>
    {% endfor %}
+    </tbody>
    </table>
    <ul>
     <li><a href="{{ligands_input}}/{{ligands_input}}.zip">Ligand inputs archive</a>: ligands in sdf and pdbqt format used as inputs for Vina</li>
     <li><a href="{{vina_output}}/{{vina_output}}.zip">Vina output archive</a>: all logs and docked ligands</li>
    </ul>
+   <h2>Initial parameters</h2>
+   <table class="parameters">
+     {% for param in params %}
+     <tr><td>{{ param }}</td><td>{{ params[param] }}</td></tr>
+     {% endfor %}
+   </table>
   </section>
   <style>
    table {
     border-collapse: collapse;
-    width: 50%;
    }
 
    td {
     padding: 8px;
-    text-align: center;
    }
 
    tr:nth-child(even) {
@@ -75,7 +89,6 @@
    }
 
    th {
-    text-align: center;
     padding: 8px;
     background-color: #808080;
     color: white;
@@ -86,6 +99,16 @@
      padding-left: 2rem;
    }
 
+   .parameters {
+     font-family: monospace;
+     max-width: 100ch;
+     white-space: pre-wrap;
+   }
   </style>
+  <script>
+    $(document).ready(() => {
+        $('#vina').DataTable();
+    });
+  </script>
  </body>
 </html>
