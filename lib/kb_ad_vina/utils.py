@@ -2,7 +2,6 @@
 This ADVinaApp takes a receptor ref and a list of ligand refs and performs
 docking using AutoDock Vina for each (receptor, ligand) pair.
 """
-import logging
 import os
 import re
 import subprocess
@@ -12,7 +11,7 @@ import uuid
 from shutil import copyfile, make_archive
 
 # This is the SFA base package which provides the Core app class.
-from base import Core
+from base import Core  # type: ignore[import]
 
 upa_filename_pattern = r"_w([0-9]+)o([0-9]+)v([0-9]+)_"
 
@@ -84,6 +83,23 @@ def ligand_as_pdbqt(ligand):
     ) as proc:
         proc.communicate()
     return f"{ligand}.pdbqt"
+
+
+def pdbqt_ligand_as_sdf(ligand_output):
+    """
+    This function expects ligand to be a path to a ligand in sdf format.
+    """
+    ligand_output_obabel_cmd = (
+        f"obabel -i pdbqt {ligand_output} -o sdf -O {ligand_output}.sdf -r"
+    )
+    with subprocess.Popen(
+        ligand_output_obabel_cmd,
+        shell=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+    ) as proc:
+        proc.communicate()
+    return f"{ligand_output}.sdf"
 
 
 def run_vina(receptor, ligand, working_directory, params):
@@ -172,9 +188,12 @@ class ADVinaApp(Core):
         """
         receptor_ref = params.get("receptor_ref")
         ligand_refs = params.get("ligand_refs")
+        ligands_output_suffix = params.get("ligands_output_suffix")
+        self.workspace_id = params["workspace_id"]
         # Download the receptor and ligands from KBase.
         resp_receptor_orig = self.download_receptor(receptor_ref)
         resp_ligands_orig = self.download_ligands(ligand_refs)
+        # Download the ligands output suffix from KBase ?
         # Convert inputs to PDBQT.
         receptor_path = self.receptor_as_pdbqt(resp_receptor_orig)
         self.receptor_filename = os.path.split(receptor_path)[1]
@@ -182,8 +201,9 @@ class ADVinaApp(Core):
         # Run AutoDock Vina on inputs.
         output = self.run_vinas(receptor_path, ligand_filenames, params)
         # Upload the resulting input and output PDBQT files.
+        ligand_output_refs = self.upload_ligands(output, ligands_output_suffix)
         # Generate the report.
-        return self.generate_report(output, params)
+        return self.generate_report(output, ligand_output_refs, params)
 
     def download_ligands(self, ligand_refs):
         """
@@ -230,7 +250,7 @@ class ADVinaApp(Core):
         )
         return out_path
 
-    def generate_report(self, output, params: dict):
+    def generate_report(self, output, ligand_output_refs, params: dict):
         """
         This method is where to define the variables to pass to the report.
         """
@@ -362,3 +382,17 @@ class ADVinaApp(Core):
             )
             for ligand_filename in ligand_filenames
         ]
+
+    def upload_ligands(self, output, suffix):
+        """
+        Upload a list of CompoundSet objects
+        param: ligands_ref - A list of ligands references/upas
+        """
+        paths = [path for (path, _) in output]
+
+        params = {
+            "workspace_id": self.workspace_id,
+            "staging_file_path": paths,
+            "compound_set_name": "sdf_set",
+        }
+        return params
