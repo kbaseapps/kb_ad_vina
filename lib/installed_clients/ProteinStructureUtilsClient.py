@@ -65,7 +65,7 @@ class ProteinStructureUtils(object):
            -> structure: parameter "input_ref" of type "obj_ref" (An X/Y/Z
            style reference @id ws)
         :returns: instance of type "ExportStructOutput" -> structure:
-           parameter "shock_id" of list of String
+           parameter "shock_ids" of list of String
         """
         return self._client.run_job('ProteinStructureUtils.export_pdb_structures',
                                     [params], self._service_ver, context)

@@ -167,8 +167,8 @@ class DataFileUtil(object):
         """
         Using the same logic as unpacking a Shock file, this method will cause
         any bzip or gzip files to be uncompressed, and then unpack tar and zip
-        archive files (uncompressing gzipped or bzipped archive files if 
-        necessary). If the file is an archive, it will be unbundled into the 
+        archive files (uncompressing gzipped or bzipped archive files if
+        necessary). If the file is an archive, it will be unbundled into the
         directory containing the original output file.
         :param params: instance of type "UnpackFileParams" -> structure:
            parameter "file_path" of String
@@ -176,6 +176,42 @@ class DataFileUtil(object):
            "file_path" of String
         """
         return self._client.run_job('DataFileUtil.unpack_file',
+                                    [params], self._service_ver, context)
+
+    def unpack_files(self, params, context=None):
+        """
+        Using the same logic as unpacking a Shock file, this method will cause
+        any bzip or gzip files to be uncompressed, and then unpack tar and zip
+        archive files (uncompressing gzipped or bzipped archive files if 
+        necessary). If the file is an archive, it will be unbundled into the 
+        directory containing the original output file.
+        The ordering of the input and output files is preserved in the input and output lists.
+        :param params: instance of list of type "UnpackFilesParams" (Input
+           parameters for the unpack_files function. Required parameter:
+           file_path - the path to the file to unpack. The file will be
+           unpacked into the file's parent directory. Optional parameter:
+           unpack - either 'uncompress' or 'unpack'. 'uncompress' will cause
+           any bzip or gzip files to be uncompressed. 'unpack' will behave
+           the same way, but it will also unpack tar and zip archive files
+           (uncompressing gzipped or bzipped archive files if necessary). If
+           'uncompress' is specified and an archive file is encountered, an
+           error will be thrown. If the file is an archive, it will be
+           unbundled into the directory containing the original output file.
+           Defaults to 'unpack'. Note that if the file name (either as
+           provided by the user or by Shock) without the a decompression
+           extension (e.g. .gz, .zip or .tgz -> .tar) points to an existing
+           file and unpack is specified, that file will be overwritten by the
+           decompressed Shock file.) -> structure: parameter "file_path" of
+           String, parameter "unpack" of String
+        :returns: instance of list of type "UnpackFilesResult" (Output
+           parameters for the unpack_files function. file_path - the path to
+           either a) the unpacked file or b) in the case of archive files,
+           the path to the original archive file, possibly uncompressed, or
+           c) in the case of regular files that don't need processing, the
+           path to the input file.) -> structure: parameter "file_path" of
+           String
+        """
+        return self._client.run_job('DataFileUtil.unpack_files',
                                     [params], self._service_ver, context)
 
     def pack_file(self, params, context=None):
@@ -357,8 +393,13 @@ class DataFileUtil(object):
 
     def save_objects(self, params, context=None):
         """
-        Save objects to the workspace. Saving over a deleted object undeletes
-        it.
+        Save objects to the workspace.
+        The objects will be sorted prior to saving to avoid the Workspace sort memory limit.
+        Note that if the object contains workspace object refs in mapping keys that may cause
+        the Workspace to resort the data. To avoid this, convert any refs in mapping keys to UPA
+        format (e.g. #/#/#, where # is a positive integer).
+        If the data is very large, using the WSLargeDataIO SDK module is advised.
+        Saving over a deleted object undeletes it.
         :param params: instance of type "SaveObjectsParams" (Input parameters
            for the "save_objects" function. Required parameters: id - the
            numerical ID of the workspace. objects - the objects to save. The
@@ -367,15 +408,12 @@ class DataFileUtil(object):
            type "ObjectSaveData" (An object and associated data required for
            saving. Required parameters: type - the workspace type string for
            the object. Omit the version information to use the latest
-           version. data - the object data. Optional parameters: One of an
-           object name or id. If no name or id is provided the name will be
-           set to 'auto' with the object id appended as a string, possibly
-           with -\d+ appended if that object id already exists as a name.
-           name - the name of the object. objid - the id of the object to
-           save over. meta - arbitrary user-supplied metadata for the object,
-           not to exceed 16kb; if the object type specifies automatic
-           metadata extraction with the 'meta ws' annotation, and your
-           metadata name conflicts, then your metadata will be silently
+           version. data - the object data. One of an object name or id: name
+           - the name of the object. objid - the id of the object to save
+           over. Optional parameters: meta - arbitrary user-supplied metadata
+           for the object, not to exceed 16kb; if the object type specifies
+           automatic metadata extraction with the 'meta ws' annotation, and
+           your metadata name conflicts, then your metadata will be silently
            overwritten. hidden - true if this object should not be listed
            when listing workspace objects. extra_provenance_input_refs -
            (optional) if set, these refs will be appended to the primary

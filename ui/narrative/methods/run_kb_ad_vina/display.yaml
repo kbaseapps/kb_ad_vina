@@ -4,7 +4,8 @@
 name: AutoDock Vina
 
 tooltip: |
-    Kbase app that wraps Autodock Vina so that multiple candidate ligands can be docked to the same target protein
+    Kbase app that wraps Autodock Vina so that multiple candidate ligands can
+    be docked to the same target protein
 
 
 screenshots: []
@@ -29,7 +30,7 @@ parameters :
         ui-name : |
             Protein structure to dock with specified ligands
         short-hint : |
-            Accepts a single Model Protein Structure
+            Accepts a single Protein Structure
     ligand_refs:
         ui-name : |
             Ligand List
@@ -90,7 +91,7 @@ parameters :
         short-hint : |
             exhaustiveness of the global search
         long-hint  : |
-            exhaustiveness of the global search (roughly proportional to time): 1+
+            exhaustiveness of the search (roughly proportional to time) 1+
     num_modes :
         ui-name : |
             number of binding modes
@@ -104,14 +105,8 @@ parameters :
         short-hint : |
             maximum energy difference b/w binding modes
         long-hint  : |
-            maximum energy difference between the best binding mode and the worst one displayed (kcal/mol)
-    ligands_output_suffix:
-        ui-name : |
-            Ligands Output Suffix
-        short-hint : |
-            The suffix to be used with the resulting output from ADVina
-        long-hint  : |
-            The suffix to be used with the resulting of the resulting ligands from ADVina.
+            maximum energy difference between the best binding mode and the
+            worst one displayed (kcal/mol)
     output_name:
         ui-name : |
             Output Name
@@ -121,7 +116,9 @@ parameters :
             A name for the ten reads returned.
 
 description : |
-    <p> Kbase app that wraps Autodock Vina so that multiple candidate ligands can be docked to the same target protein. Produces Affinity table and pdbqt and sdf output files.</p>
+    <p>This app wraps Autodock Vina so that multiple candidate ligands
+    can be docked to the same target protein. Produces Affinity table, and
+    output files in pdbqt and sdf formats.</p>
 
 publications :
     -

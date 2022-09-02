@@ -188,7 +188,7 @@ class ADVinaApp(Core):
         """
         receptor_ref = params.get("receptor_ref")
         ligand_refs = params.get("ligand_refs")
-        ligands_out_suffix = params.get("ligands_output_suffix")
+        # ligands_out_suffix = params.get("ligands_output_suffix")
         self.workspace_id = params["workspace_id"]
         # Download the receptor and ligands from KBase.
         resp_receptor_orig = self.download_receptor(receptor_ref)
@@ -201,9 +201,11 @@ class ADVinaApp(Core):
         # Run AutoDock Vina on inputs.
         output = self.run_vinas(receptor_path, ligand_filenames, params)
         # Upload the resulting input and output PDBQT files.
-        ligand_output_refs = self.upload_ligands(ligands_out_suffix, output)
+        # NOTE: Upload is disabled for now since CompoundSetUtils does not
+        # support direct uploads at this time.
+        # ligand_output_refs = self.upload_ligands(ligands_out_suffix, output)
         # Generate the report.
-        return self.generate_report(output, ligand_output_refs, params)
+        return self.generate_report(output, params)
 
     def download_ligands(self, ligand_refs):
         """
@@ -239,18 +241,26 @@ class ADVinaApp(Core):
         param: receptor_ref - the receptor reference/upa
         """
         out = self.psu.export_pdb_structures({"input_ref": receptor_ref})
+        message = textwrap.dedent("""
+        Currently ProteinStructureUtils stores handles instead of blobstore ids
+        """)
+        print(message)
+        print(out)
+        shock_ids = out["shock_ids"]
+        if len(shock_ids) > 1:
+            raise Exception("Only one receptor is supported by this app.")
         out_filename = f"{encode_upa_filename(receptor_ref)}.pdb"
         out_path = os.path.join(self.reports_path, out_filename)
         self.dfu.shock_to_file(
             {
                 "file_path": out_path,
-                "shock_id": out["shock_id"],
+                "handle_id": shock_ids[0],
                 "unpack": "uncompress",
             }
         )
         return out_path
 
-    def generate_report(self, output, ligand_output_refs, params: dict):
+    def generate_report(self, output, params: dict):
         """
         This method is where to define the variables to pass to the report.
         """
@@ -393,7 +403,7 @@ class ADVinaApp(Core):
             out = self.csu.compound_set_from_file(
                 {
                     "workspace_id": self.workspace_id,
-                    "staging_file_path": o_ligand_ref,
+                    "staging_file_path": os.path.join("../../../", o_ligand_ref),
                     "compound_set_name": "sdf_set",
                 }
             )

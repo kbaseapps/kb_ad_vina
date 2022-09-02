@@ -50,6 +50,7 @@ class kb_ad_vinaTest(unittest.TestCase):
         suffix = int(time.time() * 1000)
         cls.wsName = "test_ContigFilter_" + str(suffix)
         ret = cls.wsClient.create_workspace({"workspace": cls.wsName})  # noqa
+        cls.wsID = ret[0]
 
     @classmethod
     def tearDownClass(cls):
@@ -73,7 +74,8 @@ class kb_ad_vinaTest(unittest.TestCase):
             self.ctx,
             {
                 "workspace_name": self.wsName,
-                "receptor_ref": "67060/5/2",
+                "workspace_id": self.wsID,
+                "receptor_ref": "67060/30/2",
                 "ligand_refs": ["67060/2/1", "67060/4/1"],
                 "center_x": -7,
                 "center_y": 78,
