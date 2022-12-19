@@ -1,8 +1,28 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { Liquid } from "liquidjs";
+import React, { FC, useEffect, useState } from "react";
+import logo from "./logo.svg";
+import "./App.css";
 
-function App() {
+const engine = new Liquid();
+
+const renderTemplate = async () => {
+  const out = await engine.parseAndRender("{{name | capitalize}}", {
+    name: "alice",
+  });
+  return out;
+};
+
+let output = "";
+
+(async () => {
+  output = await renderTemplate();
+})();
+
+const App: FC = () => {
+  const [out, setOut] = useState("");
+  useEffect(() => {
+    setOut(output);
+  }, [out]);
   return (
     <div className="App">
       <header className="App-header">
@@ -19,8 +39,9 @@ function App() {
           Learn React
         </a>
       </header>
+      <section>Name: {out}</section>
     </div>
   );
-}
+};
 
 export default App;
