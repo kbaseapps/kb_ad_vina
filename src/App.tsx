@@ -1,28 +1,49 @@
+import DOMPurify from "dompurify";
 import { Liquid } from "liquidjs";
 import React, { FC, useEffect, useState } from "react";
 import logo from "./logo.svg";
+import templateURL from "./report.liquid";
 import "./App.css";
 
+//const templateURL = "/report.html";
+
+const purify = DOMPurify(window);
 const engine = new Liquid();
 
 const renderTemplate = async () => {
-  const out = await engine.parseAndRender("{{name | capitalize}}", {
+  const template = await (await fetch(templateURL)).text();
+  console.log({ template }); // eslint-disable-line no-console
+  const out = await engine.parseAndRender(template, {
     name: "alice",
   });
   return out;
 };
 
+let count = 0;
 let output = "";
 
-(async () => {
+const onLoad = async (setOut: (update: string) => void) => {
   output = await renderTemplate();
-})();
+  console.log({ output }); // eslint-disable-line no-console
+  setOut(output);
+};
 
 const App: FC = () => {
-  const [out, setOut] = useState("");
+  // const out = "";
+  count += 1;
+  const [out, setOut] = useState("Template output.");
+  const [loaded, setLoaded] = useState(0);
+
   useEffect(() => {
+    if (loaded < 1) {
+      onLoad(setOut);
+      setLoaded(loaded + 1);
+    }
     setOut(output);
-  }, [out]);
+    console.log("effect", { count, loaded, out, output }); // eslint-disable-line no-console
+  }, [loaded, out]);
+  console.log("render App", { count, out }); // eslint-disable-line no-console
+  console.log({ templateURL });
   return (
     <div className="App">
       <header className="App-header">
@@ -39,7 +60,7 @@ const App: FC = () => {
           Learn React
         </a>
       </header>
-      <section>Name: {out}</section>
+      <section dangerouslySetInnerHTML={{ __html: purify.sanitize(out) }} />
     </div>
   );
 };
