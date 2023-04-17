@@ -2,6 +2,7 @@
 This ADVinaApp takes a receptor ref and a list of ligand refs and performs
 docking using AutoDock Vina for each (receptor, ligand) pair.
 """
+import json
 import os
 import re
 import subprocess
@@ -287,12 +288,14 @@ class ADVinaApp(Core):
         template_variables = dict(
             affinitys=affinitys,
             ligands_input=self.ligands_input,
-            logs=logs,
+            logs=list(logs.items()),
             output=output,
             params=params,
             receptor=self.receptor_filename,
             vina_output=self.vina_output,
         )
+        with open(os.path.join(self.reports_path, "data.json"), "w") as data:
+            json.dump(template_variables, data)
         # Parameters for create_extended_report
         report_name = f"ADVinaApp_{str(uuid.uuid4())}"
         html_links = [

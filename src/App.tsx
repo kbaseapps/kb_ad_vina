@@ -1,20 +1,24 @@
 import DOMPurify from "dompurify";
-import { Liquid } from "liquidjs";
+import * as nunjucks from "nunjucks";
 import React, { FC, useEffect, useState } from "react";
 import logo from "./logo.svg";
-import templateURL from "./report.liquid";
+// import templateURL from "./report.liquid";
 import "./App.css";
 
-//const templateURL = "/report.html";
+const templateURL = "/report.html";
 
 const purify = DOMPurify(window);
-const engine = new Liquid();
+nunjucks.configure({ autoescape: true });
 
 const renderTemplate = async () => {
   const template = await (await fetch(templateURL)).text();
   console.log({ template }); // eslint-disable-line no-console
-  const out = await engine.parseAndRender(template, {
+  const out = await nunjucks.renderString(template, {
     name: "alice",
+    logs: [
+      ["log1", { name: "Dakota" }],
+      ["log2", { name: "Ziming" }],
+    ],
   });
   return out;
 };
