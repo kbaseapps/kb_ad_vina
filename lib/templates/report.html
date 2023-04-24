@@ -71,8 +71,8 @@
    </ul>
    <h2>Initial parameters</h2>
    <table class="parameters">
-     {% for param in params %}
-     <tr><td>{{ param }}</td><td>{{ params[param] }}</td></tr>
+     {% for param, value in params %}
+     <tr><td>{{ param }}</td><td>{{ value }}</td></tr>
      {% endfor %}
    </table>
   </section>

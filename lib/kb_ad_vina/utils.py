@@ -290,7 +290,7 @@ class ADVinaApp(Core):
             ligands_input=self.ligands_input,
             logs=list(logs.items()),
             output=output,
-            params=params,
+            params=list(params.items()),
             receptor=self.receptor_filename,
             vina_output=self.vina_output,
         )

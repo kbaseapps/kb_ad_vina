@@ -1,25 +1,19 @@
 import DOMPurify from "dompurify";
 import * as nunjucks from "nunjucks";
 import React, { FC, useEffect, useState } from "react";
-import logo from "./logo.svg";
-// import templateURL from "./report.liquid";
 import "./App.css";
 
 const templateURL = "/report.html";
+const templateContextURL = "/data.json";
 
 const purify = DOMPurify(window);
 nunjucks.configure({ autoescape: true });
 
 const renderTemplate = async () => {
+  const context = await (await fetch(templateContextURL)).json();
   const template = await (await fetch(templateURL)).text();
   console.log({ template }); // eslint-disable-line no-console
-  const out = await nunjucks.renderString(template, {
-    name: "alice",
-    logs: [
-      ["log1", { name: "Dakota" }],
-      ["log2", { name: "Ziming" }],
-    ],
-  });
+  const out = await nunjucks.renderString(template, context);
   return out;
 };
 
@@ -33,7 +27,6 @@ const onLoad = async (setOut: (update: string) => void) => {
 };
 
 const App: FC = () => {
-  // const out = "";
   count += 1;
   const [out, setOut] = useState("Template output.");
   const [loaded, setLoaded] = useState(0);
@@ -48,25 +41,7 @@ const App: FC = () => {
   }, [loaded, out]);
   console.log("render App", { count, out }); // eslint-disable-line no-console
   console.log({ templateURL });
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-      <section dangerouslySetInnerHTML={{ __html: purify.sanitize(out) }} />
-    </div>
-  );
+  return <section dangerouslySetInnerHTML={{ __html: purify.sanitize(out) }} />;
 };
 
 export default App;
