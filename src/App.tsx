@@ -1,3 +1,4 @@
+import DataTable from "datatables.net-dt";
 import DOMPurify from "dompurify";
 import * as nunjucks from "nunjucks";
 import React, { FC, useEffect, useState } from "react";
@@ -12,7 +13,6 @@ nunjucks.configure({ autoescape: true });
 const renderTemplate = async () => {
   const context = await (await fetch(templateContextURL)).json();
   const template = await (await fetch(templateURL)).text();
-  console.log({ template }); // eslint-disable-line no-console
   const out = await nunjucks.renderString(template, context);
   return out;
 };
@@ -22,7 +22,6 @@ let output = "";
 
 const onLoad = async (setOut: (update: string) => void) => {
   output = await renderTemplate();
-  console.log({ output }); // eslint-disable-line no-console
   setOut(output);
 };
 
@@ -37,11 +36,14 @@ const App: FC = () => {
       setLoaded(loaded + 1);
     }
     setOut(output);
-    console.log("effect", { count, loaded, out, output }); // eslint-disable-line no-console
   }, [loaded, out]);
   console.log("render App", { count, out }); // eslint-disable-line no-console
-  console.log({ templateURL });
-  return <section dangerouslySetInnerHTML={{ __html: purify.sanitize(out) }} />;
+  const doc = (
+    <section dangerouslySetInnerHTML={{ __html: purify.sanitize(out) }} />
+  );
+  const table = new DataTable("#vina", { retrieve: true });
+  console.log({ table }); // eslint-disable-line no-console
+  return doc;
 };
 
 export default App;
